@@ -103,6 +103,20 @@ def detect_captcha(page):
 def wait_for_captcha(page):
     if detect_captcha(page):
         cprint("\n⚠️ CAPTCHA DETECTED!", Fore.LIGHTYELLOW_EX)
+        cprint("Attempting to close captcha...", Fore.CYAN)
+        try:
+            close_btn_xpath = 'xpath=/html/body/div[6]/div/div/div/div[1]/div[1]/button'
+            close_btn = page.locator(close_btn_xpath)
+            if close_btn.count() > 0 and close_btn.is_visible():
+                close_btn.click(timeout=3000)
+                page.wait_for_timeout(2000)
+                
+                if not detect_captcha(page):
+                    cprint("✅ Captcha closed successfully.", Fore.GREEN)
+                    return
+        except:
+            pass
+            
         cprint("Hard-resetting Chrome to clear captcha...", Fore.CYAN)
         raise CaptchaRestartException()
 
