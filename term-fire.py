@@ -58,6 +58,7 @@ CAPTCHA_SELECTORS = [
     '.captcha_verify_slide',
     '#captcha_container'
 ]
+LOGIN_BTN_SELECTORS = [
     'xpath=/html/body/div[1]/div[2]/div/div/div[3]/div[2]/button/div/div',
     'xpath=//*[@id="header-login-button"]',
     '[data-e2e="nav-login-button"]',
