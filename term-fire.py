@@ -45,8 +45,19 @@ STEALTH_JS = """() => {
     Object.defineProperty(navigator, 'hardwareConcurrency', { get: () => 8 });
     Object.defineProperty(navigator, 'deviceMemory', { get: () => 8 });
 }"""
-CAPTCHA_SELECTORS = ['#captcha-verify-image', '.captcha_verify_container', '[id*="captcha"]', 'div:has-text("Verify you are human")']
-LOGIN_BTN_SELECTORS = [
+CAPTCHA_SELECTORS = [
+    '#captcha-verify-image', 
+    '.captcha_verify_container', 
+    '[id*="captcha"]', 
+    'div:has-text("Verify you are human")',
+    'div:has-text("Drag the slider to fit the puzzle")',
+    'div:has-text("Slide to complete the puzzle")',
+    'div:has-text("Drag the puzzle piece")',
+    'div:has-text("Select 2 objects")',
+    'div:has-text("Verify to continue")',
+    '.captcha_verify_slide',
+    '#captcha_container'
+]
     'xpath=/html/body/div[1]/div[2]/div/div/div[3]/div[2]/button/div/div',
     'xpath=//*[@id="header-login-button"]',
     '[data-e2e="nav-login-button"]',
@@ -78,8 +89,12 @@ def gradient_banner(text):
 def detect_captcha(page):
     for sel in CAPTCHA_SELECTORS:
         try:
-            if page.locator(sel).count() > 0:
-                return True
+            loc = page.locator(sel)
+            if loc.count() > 0:
+                for i in range(loc.count()):
+                    if loc.nth(i).is_visible():
+                        cprint(f"[DEBUG] Captcha detected", Fore.YELLOW)
+                        return True
         except:
             pass
     return False
